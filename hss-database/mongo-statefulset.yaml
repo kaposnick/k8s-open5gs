@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mongo
+  namespace: open5gs
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: pod-service-endpoint-reader
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - services
+      - endpoints
+    verbs:
+      - get
+      - list
+      - watch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: system:serviceaccount:open5g:mongo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pod-service-endpoint-reader
+subjects:
+  - kind: ServiceAccount
+    name: mongo
+    namespace: open5gs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: open5gs
+  labels:
+    name: mongo
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+  clusterIP: None
+  selector:
+    role: mongo
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+  namespace: open5gs
+spec:
+  serviceName: "mongodb"
+  replicas: 1
+  selector:
+    matchLabels:
+      role: mongo
+  template:
+    metadata:
+      labels:
+        role: mongo
+        environment: test
+    spec:
+      serviceAccountName: mongo
+      automountServiceAccountToken: true
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mongo
+          image: mongo
+          command:
+            - mongod
+          args:
+            - "--replSet=rs0"
+            - "--bind_ip=0.0.0.0"
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-persistent-storage
+              mountPath: /data/db
+        - name: mongo-sidecar
+          image: morphy/k8s-mongo-sidecar
+          env:
+            - name: KUBERNETES_POD_LABELS
+              value: "role=mongo,environment=test"
+            - name: KUBERNETES_SERVICE_NAME
+              value: "mongodb"
+      volumes:
+      - name: mongo-persistent-storage
+        emptyDir: {}

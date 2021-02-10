@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-pgwc-svc-pool
+  namespace: open5gs
+  labels:
+    epc-mode: pgwc
+spec:
+  type: ClusterIP
+  ports:
+  - name: gtpc
+    port: 2123
+    protocol: UDP
+  - name: pfcp
+    port: 8805
+    protocol: UDP
+  selector:
+    epc-mode: pgwc    
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: StatefulSet 
+metadata:
+  name: open5gs-pgwc-deployment
+  namespace: open5gs
+  labels:
+    epc-mode: pgwc
+spec:
+  replicas: 1
+  serviceName: "open5gs-pgwc-svc-pool"
+  selector:
+    matchLabels:
+      epc-mode: pgwc
+  template:
+    metadata:          
+      labels:
+        epc-mode: pgwc
+    spec:
+      containers:
+        - name: pgwc
+          image: open5gs-custom
+          imagePullPolicy: Never
+          command: ["open5gs-smfd", "-c", "/open5gs/config-map/pgwc.yaml"]
+          volumeMounts:
+          - name: open5gs-pgwc-config
+            mountPath: /open5gs/config-map/pgwc.yaml
+            subPath: "pgwc.yaml"
+          - name: open5gs-pgwc-diameter
+            mountPath: /open5gs/config-map/diameter-pgwc.conf
+            subPath: "diameter-pgwc.conf"
+          ports:
+            - name: gtpc
+              containerPort: 2123
+              protocol: UDP
+            - name: pfcp
+              containerPort: 8805
+              protocol: UDP      
+      volumes:
+        - name: open5gs-pgwc-config
+          configMap:
+            name: open5gs-pgwc-config
+        - name: open5gs-pgwc-diameter
+          configMap:
+            name: open5gs-pgwc-diameter
