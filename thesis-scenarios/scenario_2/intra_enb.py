@@ -177,7 +177,7 @@ class Worker(Qt.QObject):
         
         for i in range(0, 10):
             self.cell_gain_update.emit(next_active_cell, (i + 1) * 0.100)
-            time.sleep(3)
+            time.sleep(4)
         
         self.cell_gain_update.emit(current_active_cell, 0)
 
@@ -188,7 +188,7 @@ class Worker(Qt.QObject):
     def update(self):
         timer = Qt.QTimer(self)
         timer.timeout.connect(self.timerMethod)
-        timer.start(40000)
+        timer.start(50000)
 
 
 def main(top_block_cls=intra_enb, options=None):
