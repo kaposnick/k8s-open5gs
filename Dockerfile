@@ -1,5 +1,5 @@
 ARG UBUNTU_VERSION=20.04
-ARG OPEN5GS_TAG=v2.1.4
+ARG OPEN5GS_TAG=v2.1.7
 
 FROM ubuntu:${UBUNTU_VERSION} as open5gs-builder 
 LABEL open5gs-builder=true 
