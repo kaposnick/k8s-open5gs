@@ -41,7 +41,7 @@ from gnuradio import qtgui
 
 class intra_enb(gr.top_block, Qt.QWidget):
 
-    def __init__(self, input_cell_gain_0):
+    def __init__(self, interval):
         gr.top_block.__init__(self, "Intra Handover Flowgraph", catch_exceptions=True)
         Qt.QWidget.__init__(self)
         self.setWindowTitle("Intra Handover Flowgraph")
@@ -76,8 +76,8 @@ class intra_enb(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.samp_rate = samp_rate = 1.92e6
-        self.cell_gain1 = cell_gain1 = 1 - input_cell_gain_0
-        self.cell_gain0 = cell_gain0 = input_cell_gain_0
+        self.cell_gain1 = cell_gain1 = 0
+        self.cell_gain0 = cell_gain0 = 1
 
         ##################################################
         # Blocks
@@ -113,14 +113,15 @@ class intra_enb(gr.top_block, Qt.QWidget):
         self.connect((self.zeromq_req_source_0_0, 0), (self.blocks_multiply_const_vxx_0_0, 0))
         self.connect((self.zeromq_req_source_1, 0), (self.blocks_throttle_0, 0))
 
-        self.obj = Worker(1 - input_cell_gain_0)
+        self.obj = Worker(interval)
         self.thread = Qt.QThread()
-        self.obj.cell_gain_update.connect(self.updateCellGain)
+        self.obj.cell_gain_update.connect(self.update_cell_gain)
         self.obj.moveToThread(self.thread)
         self.thread.started.connect(self.obj.update)
+        self.thread.finished.connect(self.obj.stop)
         self.thread.start()
 
-    def updateCellGain(self, cell, newValue):
+    def update_cell_gain(self, cell, newValue):
         if (cell == 0):
             self._cell_gain0_win.d_widget.sliderChanged(newValue)
         elif (cell == 1):
@@ -128,6 +129,7 @@ class intra_enb(gr.top_block, Qt.QWidget):
 
 
     def closeEvent(self, event):
+        self.thread.quit()
         self.settings = Qt.QSettings("GNU Radio", "intra_enb")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
@@ -161,9 +163,10 @@ class intra_enb(gr.top_block, Qt.QWidget):
 class Worker(Qt.QObject):
     cell_gain_update = Qt.pyqtSignal(int, float)
 
-    def __init__ (self, activeCell):
+    def __init__ (self, interval, active_cell = 0):
         super().__init__()
-        self.active_cell = activeCell
+        self.active_cell = active_cell
+        self.interval = interval
 
     def timerMethod(self):
         current_active_cell = 0
@@ -177,18 +180,24 @@ class Worker(Qt.QObject):
         
         for i in range(0, 10):
             self.cell_gain_update.emit(next_active_cell, (i + 1) * 0.100)
-            time.sleep(4)
+            time.sleep(self.interval)
         
         self.cell_gain_update.emit(current_active_cell, 0)
 
         self.active_cell = next_active_cell
-        print("Handover to node " + str(self.active_cell))
+        print("Handover made")
 
     @Qt.pyqtSlot()
     def update(self):
-        timer = Qt.QTimer(self)
-        timer.timeout.connect(self.timerMethod)
-        timer.start(50000)
+        self.timer = Qt.QTimer(self)
+        self.timer.timeout.connect(self.timerMethod)
+
+        # Add 10 seconds between each handover
+        self.timer.start( ( (10 * self.interval) + 10 ) * 1000)
+
+    @Qt.pyqtSlot()
+    def stop(self):
+        self.timer.stop()
 
 
 def main(top_block_cls=intra_enb, options=None):
@@ -198,7 +207,12 @@ def main(top_block_cls=intra_enb, options=None):
         Qt.QApplication.setGraphicsSystem(style)
     qapp = Qt.QApplication(sys.argv)
 
-    tb = top_block_cls(1)
+    interval = 4
+    if (len(sys.argv) >= 2):
+        interval = int(sys.argv[1])
+
+
+    tb = top_block_cls(interval)
 
     tb.start()
 
