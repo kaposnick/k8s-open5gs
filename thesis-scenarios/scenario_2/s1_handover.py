@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: Intra Handover Flowgraph
+# Title: S1 Handover Flowgraph
 # GNU Radio version: 3.9.0.0
 
 from distutils.version import StrictVersion
@@ -39,12 +39,12 @@ import time
 
 from gnuradio import qtgui
 
-class intra_enb(gr.top_block, Qt.QWidget):
+class s1_handover(gr.top_block, Qt.QWidget):
 
     def __init__(self, interval):
-        gr.top_block.__init__(self, "Intra Handover Flowgraph", catch_exceptions=True)
+        gr.top_block.__init__(self, "S1 Handover Flowgraph", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("Intra Handover Flowgraph")
+        self.setWindowTitle("S1 Handover Flowgraph")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -62,7 +62,7 @@ class intra_enb(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "intra_enb")
+        self.settings = Qt.QSettings("GNU Radio", "s1_handover")
 
         try:
             if StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
@@ -130,7 +130,7 @@ class intra_enb(gr.top_block, Qt.QWidget):
 
     def closeEvent(self, event):
         self.thread.quit()
-        self.settings = Qt.QSettings("GNU Radio", "intra_enb")
+        self.settings = Qt.QSettings("GNU Radio", "s1_handover")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -200,7 +200,7 @@ class Worker(Qt.QObject):
         self.timer.stop()
 
 
-def main(top_block_cls=intra_enb, options=None):
+def main(top_block_cls=s1_handover, options=None):
 
     if StrictVersion("4.5.0") <= StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
         style = gr.prefs().get_string('qtgui', 'style', 'raster')
