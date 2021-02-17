@@ -1,26 +1,9 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-replicaCount: 1
-
-=======
->>>>>>> master-thesis-tests
-=======
->>>>>>> master-thesis-tests
 mmeExternalAddress: 1.2.3.4
 sgwuExternalAddress: 1.2.3.4
 webUiExternalAddress: 1.2.3.4
 webUiPort: 80
-<<<<<<< HEAD
 initSubcribers: false
-<<<<<<< HEAD
-mongoReplicas: 3
-=======
 mongoReplicas: 1
->>>>>>> master-thesis-tests
-=======
-initSubcribers: true
-mongoReplicas: 1
->>>>>>> master-thesis-tests
 
 requestsPreferences:
   hssDatabase:
@@ -45,13 +28,8 @@ resources:
     memory: "64Mi"
     cpu: "250m"
   limits:
-<<<<<<< HEAD
     memory: "250Mi"
     cpu: "500m"
-=======
-    memory: "100Mi"
-    cpu: "300m"
->>>>>>> master-thesis-tests
 
 image:
   repository: open5gs-custom
