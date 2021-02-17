@@ -2,7 +2,11 @@
 
 This repository is about how to deploy a cloud native Open5Gs core using kubernetes and minikube.
 
+Main repository of my master thesis:
 
+1. Title: <b>Performance evaluation of E2E service orchestration</b> 
+2. Course: <b>Master in NFV/SDN for 5G Networks 2020/21</b> 
+3. University: <b>Universidad Carlos III de Madrid (UC3M)</b>
 
 ## Setup your environment
 Tools that you will need in order to build and run the cloud native Open5Gs:
