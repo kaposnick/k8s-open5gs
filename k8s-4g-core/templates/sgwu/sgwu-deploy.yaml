@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: open5gs-sgwu-svc-pool-external
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-sgwu-svc-pool-external
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: sgwu
 spec:
   type: LoadBalancer
   externalIPs:
-    - 1.2.3.4
+    - {{ .Values.sgwuExternalAddress }}
   ports:
     - name: s1u
       port: 2152
@@ -20,8 +20,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: open5gs-sgwu-svc-pool
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-sgwu-svc-pool
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: sgwu
 spec:
@@ -36,13 +36,13 @@ spec:
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: StatefulSet
 metadata:
-  name: open5gs-sgwu-deployment
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-sgwu-deployment
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: sgwu
 spec:
   replicas: 1
-  serviceName: "open5gs-sgwu-svc-pool"
+  serviceName: "{{ .Release.Namespace }}-sgwu-svc-pool"
   selector:
     matchLabels:
       epc-mode: sgwu
@@ -53,11 +53,15 @@ spec:
     spec:
       containers:
         - name: sgwu
-          image: open5gs-custom
-          imagePullPolicy: Never
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["open5gs-sgwud", "-c", "/open5gs/config-map/sgwu.yaml"]
+          {{ if eq .Values.requestsPreferences.sgwu.requestsLimitsDefinition true}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{ end }}
           volumeMounts:
-            - name: open5gs-sgwu-config
+            - name: {{ .Release.Namespace }}-sgwu-config
               mountPath: /open5gs/config-map/sgwu.yaml
               subPath: "sgwu.yaml"
           ports:
@@ -68,6 +72,6 @@ spec:
               containerPort: 8805
               protocol: UDP
       volumes:
-        - name: open5gs-sgwu-config
+        - name: {{ .Release.Namespace }}-sgwu-config
           configMap:
-            name: open5gs-sgwu-config
+            name: {{ .Release.Namespace }}-sgwu-config

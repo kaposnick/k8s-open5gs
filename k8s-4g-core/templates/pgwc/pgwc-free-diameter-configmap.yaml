@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: open5gs-pgwc-diameter
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-pgwc-diameter
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: pgwc
 data:
@@ -269,7 +269,7 @@ data:
   # Examples:
   #ConnectPeer = "aaa.wide.ad.jp";
   #ConnectPeer = "old.diameter.serv" { TcTimer = 60; TLS_old_method; No_SCTP; Port=3868; } ;
-  ConnectPeer = "pcrf.localdomain" { ConnectTo = "open5gs-pcrf-svc-pool"; No_TLS; };
+  ConnectPeer = "pcrf.localdomain" { ConnectTo = "{{ .Release.Namespace }}-pcrf-svc-pool"; No_TLS; };
 
 
   ##############################################################

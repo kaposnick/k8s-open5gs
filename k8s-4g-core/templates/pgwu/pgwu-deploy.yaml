@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: open5gs-pgwu-svc-pool
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-pgwu-svc-pool
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: pgwu
 spec:
@@ -23,13 +23,13 @@ spec:
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: StatefulSet 
 metadata:
-  name: open5gs-pgwu-deployment
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-pgwu-deployment
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: pgwu
 spec:
   replicas: 1
-  serviceName: "open5gs-pgwu-svc-pool"
+  serviceName: "{{ .Release.Namespace }}-pgwu-svc-pool"
   selector:
     matchLabels:
       epc-mode: pgwu
@@ -40,8 +40,8 @@ spec:
     spec:
       containers:
         - name: pgwu
-          image: open5gs-custom
-          imagePullPolicy: Never
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
             privileged: true
             #sysctls:
@@ -59,8 +59,12 @@ spec:
               sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward";
               iptables -t nat -A POSTROUTING -s 10.45.0.0/16 ! -o ogstun -j MASQUERADE;
               open5gs-upfd -c /open5gs/config-map/pgwu.yaml;
+          {{ if eq .Values.requestsPreferences.pgwu.requestsLimitsDefinition true}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{ end }}
           volumeMounts:
-          - name: open5gs-pgwu-config
+          - name: {{ .Release.Namespace }}-pgwu-config
             mountPath: /open5gs/config-map/pgwu.yaml
             subPath: "pgwu.yaml"
           - mountPath: /dev/net/tun
@@ -73,12 +77,12 @@ spec:
               containerPort: 8805
               protocol: UDP       
       volumes:
-        - name: open5gs-pgwu-config
+        - name: {{ .Release.Namespace }}-pgwu-config
           configMap:
-            name: open5gs-pgwu-config
-        - name: open5gs-pgwu-diameter
+            name: {{ .Release.Namespace }}-pgwu-config
+        - name: {{ .Release.Namespace }}-pgwu-diameter
           configMap:
-            name: open5gs-pgwu-diameter            
+            name: {{ .Release.Namespace }}-pgwu-diameter            
         - name: dev-net-tun
           hostPath:
             path: /dev/net/tun

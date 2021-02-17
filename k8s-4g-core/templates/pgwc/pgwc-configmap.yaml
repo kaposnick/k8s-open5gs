@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: open5gs-pgwc-config
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-pgwc-config
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: pgwc
 data:
@@ -30,4 +30,4 @@ data:
     
     upf:
         pfcp:
-          - name: "open5gs-pgwu-svc-pool"
+          - name: "{{ .Release.Namespace }}-pgwu-svc-pool"

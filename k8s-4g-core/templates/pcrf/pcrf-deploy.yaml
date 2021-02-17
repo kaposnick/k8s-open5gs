@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: open5gs-pcrf-svc-pool
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-pcrf-svc-pool
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: pcrf
 spec:
@@ -16,13 +16,13 @@ spec:
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: StatefulSet
 metadata:
-  name: open5gs-pcrf-deployment
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-pcrf-deployment
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: pcrf
 spec:
   replicas: 1
-  serviceName: "open5gs-pcrf-svc-pool"
+  serviceName: "{{ .Release.Namespace }}-pcrf-svc-pool"
   selector:
     matchLabels:
       epc-mode: pcrf
@@ -33,24 +33,28 @@ spec:
     spec:
       containers:
         - name: pcrf
-          image: open5gs-custom
-          imagePullPolicy: Never
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["open5gs-pcrfd", "-c", "/open5gs/config-map/pcrf.yaml"]
           volumeMounts:
-          - name: open5gs-pcrf-config
+          - name: {{ .Release.Namespace }}-pcrf-config
             mountPath: /open5gs/config-map/pcrf.yaml
             subPath: "pcrf.yaml"
-          - name: open5gs-pcrf-diameter
+          - name: {{ .Release.Namespace }}-pcrf-diameter
             mountPath: /open5gs/config-map/diameter-pcrf.conf
             subPath: "diameter-pcrf.conf"
+          {{ if eq .Values.requestsPreferences.pcrf.requestsLimitsDefinition true}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{ end }}
           ports:
             - name: gx
               containerPort: 3868
               protocol: TCP 
       volumes:
-        - name: open5gs-pcrf-config
+        - name: {{ .Release.Namespace }}-pcrf-config
           configMap:
-            name: open5gs-pcrf-config
-        - name: open5gs-pcrf-diameter
+            name: {{ .Release.Namespace }}-pcrf-config
+        - name: {{ .Release.Namespace }}-pcrf-diameter
           configMap:
-            name: open5gs-pcrf-diameter            
+            name: {{ .Release.Namespace }}-pcrf-diameter            

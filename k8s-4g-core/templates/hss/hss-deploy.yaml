@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Namespace }}-hss-svc-pool
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: hss
+spec:
+  ports:
+  - name: s6a
+    port: 3868
+    protocol: TCP
+  selector:
+    epc-mode: hss
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Namespace }}-hss-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: hss
+spec:
+  replicas: 1 
+  serviceName: "{{ .Release.Namespace }}-hss-svc-pool"
+  selector:
+    matchLabels:
+      epc-mode: hss
+  template:
+    metadata:
+     labels:
+        epc-mode: hss
+        level: pod
+    spec:
+      containers:
+        - name: hss
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["open5gs-hssd", "-c", "/open5gs/config-map/hss.yaml"]
+          volumeMounts:
+          - name: {{ .Release.Namespace }}-hss-config
+            mountPath: /open5gs/config-map/hss.yaml
+            subPath: "hss.yaml"
+          - name: {{ .Release.Namespace }}-hss-diameter
+            mountPath: /open5gs/config-map/diameter-hss.conf
+            subPath: "diameter-hss.conf"         
+          {{ if eq .Values.requestsPreferences.hss.requestsLimitsDefinition true}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{ end }}
+             
+      volumes:
+      - name: {{ .Release.Namespace }}-hss-config
+        configMap:
+          name: {{ .Release.Namespace }}-hss-config
+      - name: {{ .Release.Namespace }}-hss-diameter
+        configMap:
+          name: {{ .Release.Namespace }}-hss-diameter          

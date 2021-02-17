@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: open5gs-hss-diameter
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-mme-diameter
+  namespace: {{ .Release.Namespace }}
   labels:
-    epc-mode: hss
+    epc-mode: mme
 data:
-  diameter-hss.conf: |
+ diameter-mme.conf: |
     # This is a sample configuration file for freeDiameter daemon.
 
     # Most of the options can be omitted, as they default to reasonable values.
@@ -25,7 +25,7 @@ data:
     # This must be a valid FQDN that resolves to the local host.
     # Default: hostname's FQDN
     #Identity = "aaa.koganei.freediameter.net";
-    Identity = "hss.localdomain";
+    Identity = "mme.localdomain";
 
     # The Diameter Realm of this daemon.
     # Default: the domain part of Identity (after the first dot).
@@ -88,7 +88,7 @@ data:
     #ListenOn = "202.249.37.5";
     #ListenOn = "2001:200:903:2::202:1";
     #ListenOn = "fe80::21c:5ff:fe98:7d62%eth0";
-    #ListenOn = "127.0.0.4";
+    #ListenOn = "127.0.0.2";
 
 
     ##############################################################
@@ -115,7 +115,7 @@ data:
     # Default : NO DEFAULT
     #TLS_Cred = "<x509 certif file.PEM>" , "<x509 private key file.PEM>";
     #TLS_Cred = "/etc/ssl/certs/freeDiameter.pem", "/etc/ssl/private/freeDiameter.key";
-    TLS_Cred = "/etc/freeDiameter/hss.cert.pem", "/etc/freeDiameter/hss.key.pem";
+    TLS_Cred = "/etc/freeDiameter/mme.cert.pem", "/etc/freeDiameter/mme.key.pem";
 
     # Certificate authority / trust anchors
     # The file containing the list of trusted Certificate Authorities (PEM list)
@@ -269,6 +269,7 @@ data:
     # Examples:
     #ConnectPeer = "aaa.wide.ad.jp";
     #ConnectPeer = "old.diameter.serv" { TcTimer = 60; TLS_old_method; No_SCTP; Port=3868; } ;
-    ConnectPeer = "mme.localdomain" { ConnectTo = "open5gs-mme-svc-pool"; No_TLS; };
+    ConnectPeer = "hss.localdomain" { ConnectTo = "{{ .Release.Namespace }}-hss-svc-pool"; No_TLS; };
+
 
     ##############################################################

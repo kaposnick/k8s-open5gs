@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: open5gs-sgwc-svc-pool
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-sgwc-svc-pool
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: sgwc
 spec:
@@ -20,13 +20,13 @@ spec:
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: StatefulSet
 metadata:
-  name: open5gs-sgwc-deployment
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-sgwc-deployment
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: sgwc
 spec:
   replicas: 1
-  serviceName: "open5gs-sgwc-svc-pool"
+  serviceName: "{{ .Release.Namespace }}-sgwc-svc-pool"
   selector:
     matchLabels:
       epc-mode: sgwc
@@ -37,11 +37,15 @@ spec:
     spec:
       containers:
         - name: sgwc
-          image: open5gs-custom
-          imagePullPolicy: Never
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["open5gs-sgwcd", "-c", "/open5gs/config-map/sgwc.yaml"]
+          {{ if eq .Values.requestsPreferences.sgwc.requestsLimitsDefinition true}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{ end }}
           volumeMounts:
-            - name: open5gs-sgwc-config
+            - name: {{ .Release.Namespace }}-sgwc-config
               mountPath: /open5gs/config-map/sgwc.yaml
               subPath: "sgwc.yaml"
           ports:
@@ -52,6 +56,6 @@ spec:
               containerPort: 8805
               protocol: UDP
       volumes:
-        - name: open5gs-sgwc-config
+        - name: {{ .Release.Namespace }}-sgwc-config
           configMap:
-            name: open5gs-sgwc-config
+            name: {{ .Release.Namespace }}-sgwc-config

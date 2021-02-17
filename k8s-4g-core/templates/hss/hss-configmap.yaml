@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: open5gs-hss-config
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-hss-config
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: hss
 data:

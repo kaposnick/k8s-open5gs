@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: open5gs-pgwc-svc-pool
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-pgwc-svc-pool
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: pgwc
 spec:
@@ -20,13 +20,13 @@ spec:
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: StatefulSet 
 metadata:
-  name: open5gs-pgwc-deployment
-  namespace: open5gs
+  name: {{ .Release.Namespace }}-pgwc-deployment
+  namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: pgwc
 spec:
   replicas: 1
-  serviceName: "open5gs-pgwc-svc-pool"
+  serviceName: "{{ .Release.Namespace }}-pgwc-svc-pool"
   selector:
     matchLabels:
       epc-mode: pgwc
@@ -37,16 +37,20 @@ spec:
     spec:
       containers:
         - name: pgwc
-          image: open5gs-custom
-          imagePullPolicy: Never
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["open5gs-smfd", "-c", "/open5gs/config-map/pgwc.yaml"]
           volumeMounts:
-          - name: open5gs-pgwc-config
+          - name: {{ .Release.Namespace }}-pgwc-config
             mountPath: /open5gs/config-map/pgwc.yaml
             subPath: "pgwc.yaml"
-          - name: open5gs-pgwc-diameter
+          - name: {{ .Release.Namespace }}-pgwc-diameter
             mountPath: /open5gs/config-map/diameter-pgwc.conf
             subPath: "diameter-pgwc.conf"
+          {{ if eq .Values.requestsPreferences.pgwc.requestsLimitsDefinition true}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{ end }}
           ports:
             - name: gtpc
               containerPort: 2123
@@ -55,9 +59,9 @@ spec:
               containerPort: 8805
               protocol: UDP      
       volumes:
-        - name: open5gs-pgwc-config
+        - name: {{ .Release.Namespace }}-pgwc-config
           configMap:
-            name: open5gs-pgwc-config
-        - name: open5gs-pgwc-diameter
+            name: {{ .Release.Namespace }}-pgwc-config
+        - name: {{ .Release.Namespace }}-pgwc-diameter
           configMap:
-            name: open5gs-pgwc-diameter
+            name: {{ .Release.Namespace }}-pgwc-diameter
