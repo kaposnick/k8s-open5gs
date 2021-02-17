@@ -1,0 +1,19 @@
+
+{{ if eq .Values.initSubcribers true }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Namespace }}-mongodb-imsi-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: mongodb
+data:
+  imsi.json: |
+    [
+     {"imsi":"001010123456789","pdn":[{"apn":"internet","pcc_rule":[],"qos":{"qci":9,"arp":{"priority_level":8,"pre_emption_vulnerability":1,"pre_emption_capability":1}},"type":2}],"ambr":{"downlink":{"$numberLong":"1024000"},"uplink":{"$numberLong":"1024000"}},"subscribed_rau_tau_timer":12,"network_access_mode":2,"subscriber_status":0,"access_restriction_data":32,"security":{"k":"00112233445566778899aabbccddeeff","amf":"8000","op":null,"opc":"63BFA50EE6523365FF14C1F45F88737D"}},
+     {"imsi":"001010123456780","pdn":[{"apn":"internet","pcc_rule":[],"qos":{"qci":9,"arp":{"priority_level":8,"pre_emption_vulnerability":1,"pre_emption_capability":1}},"type":2}],"ambr":{"downlink":{"$numberLong":"1024000"},"uplink":{"$numberLong":"1024000"}},"subscribed_rau_tau_timer":12,"network_access_mode":2,"subscriber_status":0,"access_restriction_data":32,"security":{"k":"00112233445566778899aabbccddeeff","amf":"8000","op":null,"opc":"63BFA50EE6523365FF14C1F45F88737D"}},
+     {"imsi":"001010123456781","pdn":[{"apn":"internet","pcc_rule":[],"qos":{"qci":9,"arp":{"priority_level":8,"pre_emption_vulnerability":1,"pre_emption_capability":1}},"type":2}],"ambr":{"downlink":{"$numberLong":"1024000"},"uplink":{"$numberLong":"1024000"}},"subscribed_rau_tau_timer":12,"network_access_mode":2,"subscriber_status":0,"access_restriction_data":32,"security":{"k":"00112233445566778899aabbccddeeff","amf":"8000","op":null,"opc":"63BFA50EE6523365FF14C1F45F88737D"}},
+     {"imsi":"001010123456782","pdn":[{"apn":"internet","pcc_rule":[],"qos":{"qci":9,"arp":{"priority_level":8,"pre_emption_vulnerability":1,"pre_emption_capability":1}},"type":2}],"ambr":{"downlink":{"$numberLong":"1024000"},"uplink":{"$numberLong":"1024000"}},"subscribed_rau_tau_timer":12,"network_access_mode":2,"subscriber_status":0,"access_restriction_data":32,"security":{"k":"00112233445566778899aabbccddeeff","amf":"8000","op":null,"opc":"63BFA50EE6523365FF14C1F45F88737D"}}
+    ]
+
+  {{ end }}

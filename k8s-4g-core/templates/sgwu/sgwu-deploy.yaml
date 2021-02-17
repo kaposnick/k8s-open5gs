@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Namespace }}-sgwu-svc-pool-external
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: sgwu
+spec:
+  type: LoadBalancer
+  externalIPs:
+    - {{ .Values.sgwuExternalAddress }}
+  ports:
+    - name: s1u
+      port: 2152
+      targetPort: 2152
+      protocol: UDP
+  selector:
+    epc-mode: sgwu
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Namespace }}-sgwu-svc-pool
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: sgwu
+spec:
+  clusterIP: None
+  ports:
+    - name: pfcp
+      port: 8805
+      protocol: UDP
+  selector:
+    epc-mode: sgwu        
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Namespace }}-sgwu-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: sgwu
+spec:
+  replicas: 1
+  serviceName: "{{ .Release.Namespace }}-sgwu-svc-pool"
+  selector:
+    matchLabels:
+      epc-mode: sgwu
+  template:
+    metadata:
+      labels:
+        epc-mode: sgwu
+    spec:
+      containers:
+        - name: sgwu
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["open5gs-sgwud", "-c", "/open5gs/config-map/sgwu.yaml"]
+          {{ if eq .Values.requestsPreferences.sgwu.requestsLimitsDefinition true}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{ end }}
+          volumeMounts:
+            - name: {{ .Release.Namespace }}-sgwu-config
+              mountPath: /open5gs/config-map/sgwu.yaml
+              subPath: "sgwu.yaml"
+          ports:
+            - name: gtpu
+              containerPort: 2152 
+              protocol: UDP
+            - name: pfcp
+              containerPort: 8805
+              protocol: UDP
+      volumes:
+        - name: {{ .Release.Namespace }}-sgwu-config
+          configMap:
+            name: {{ .Release.Namespace }}-sgwu-config

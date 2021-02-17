@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mongo
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: pod-service-endpoint-reader
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - services
+      - endpoints
+    verbs:
+      - get
+      - list
+      - watch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: system:serviceaccount:open5g:mongo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pod-service-endpoint-reader
+subjects:
+  - kind: ServiceAccount
+    name: mongo
+    namespace: open5gs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: {{ .Release.Namespace }}
+  labels:
+    name: mongo
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+  clusterIP: None
+  selector:
+    role: mongo
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+  namespace: {{ .Release.Namespace }}
+spec:
+  serviceName: "mongodb"
+  replicas: {{ .Values.mongoReplicas }}
+  selector:
+    matchLabels:
+      role: mongo
+  template:
+    metadata:
+      labels:
+        role: mongo
+        environment: test
+    spec:
+      serviceAccountName: mongo
+      automountServiceAccountToken: true
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mongo
+          image: mongo
+          {{ if eq .Values.initSubcribers true }}
+          lifecycle:
+            postStart:
+              exec:
+                command: ["bash", "/open5gs/config-map/reg_subscriber.sh"]
+          {{ end }}
+
+          command:
+            - mongod
+          args:
+            - "--replSet=rs0"
+            - "--bind_ip=0.0.0.0"
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+          - name: mongo-persistent-storage
+            mountPath: /data/db
+          {{ if eq .Values.initSubcribers true }}
+          - name: {{ .Release.Namespace }}-mongodb-imsi-config
+            mountPath: /open5gs/config-map/imsi.json
+            subPath: "imsi.json"
+          - name: {{ .Release.Namespace }}-mongodb-config
+            mountPath: /open5gs/config-map/reg_subscriber.sh
+            subPath: "reg_subscriber.sh"
+          {{ end }}
+
+          {{ if eq .Values.requestsPreferences.hssDatabase.requestsLimitsDefinition true}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{ end }}
+
+        - name: mongo-sidecar
+          image: morphy/k8s-mongo-sidecar
+          env:
+            - name: KUBERNETES_POD_LABELS
+              value: "role=mongo,environment=test"
+            - name: KUBERNETES_SERVICE_NAME
+              value: "mongodb"
+      volumes:
+      - name: mongo-persistent-storage
+        emptyDir: {}
+      {{ if eq .Values.initSubcribers true }}
+      - name: {{ .Release.Namespace }}-mongodb-imsi-config
+        configMap:
+          name: {{ .Release.Namespace }}-mongodb-imsi-config
+      - name: {{ .Release.Namespace }}-mongodb-config
+        configMap:
+          name: {{ .Release.Namespace }}-mongodb-config
+      {{ end }}
