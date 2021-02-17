@@ -148,43 +148,6 @@ PING 1.2.3.4 (1.2.3.4) 56(84) bytes of data.
 rtt min/avg/max/mdev = 0.134/0.134/0.134/0.000 ms
 ```
 
-## How to run the test scenarios
-In order to run the test scenarios you have to have installed the srsENB, srsUE from srsLTE package.
-Before we run each test we have to manually add some subscribers inside the hss-database
-
-```shell
-kubectl exec -it mongo-0 -- /bin/bash
-bash /open5gs/config-map/reg_subscriber.sh
-exit
-git checkout master-thesis-scenarios
-```
-
-#### Scenario 1: [2 eNBs/4 UEs]
-<pre><code>
-cd thesis-scenarios/scenario_1
-sudo ip netns add ue1
-sudo ip netns add ue2
-sudo ip netns add ue3
-sudo ip netns add ue4
-sudo srsenb --enb_files.rr_config rr.conf --enb_files.sib_config ../common/sib.conf --enb_files.drb_config ../common/drb.conf enb.conf
-sudo srsenb --enb_files.rr_config rr.conf --enb_files.sib_config ../common/sib.conf --enb_files.drb_config ../common/drb.conf enb2.conf
-sudo srsue ue.conf --gw.netns=ue1
-sudo srsue ue2.conf --gw.netns=ue2
-sudo srsue ue3.conf --gw.netns=ue3
-sudo srsue ue4.conf --gw.netns=ue4
-</code></pre>
-
-#### Scenario 2: [1 eNB/ 1UE] Inter-eNB S1- Handover  
-<pre><code>
-cd thesis-scenarios/scenario_2
-sudo ip netns add ue1
-sudo ip netns add ue2
-sudo srsenb --enb_files.rr_config rr1.conf --enb_files.sib_config ../common/sib.conf --enb_files.drb_config ../common/drb.conf enb.conf
-sudo srsenb --enb_files.rr_config rr2.conf --enb_files.sib_config ../common/sib.conf --enb_files.drb_config ../common/drb.conf enb2.conf
-sudo srsue ue.conf --gw.netns=ue1
-python3 s1_handover.py 5
-</code></pre>
-
 ## Copyright and license
 MIT License
 
