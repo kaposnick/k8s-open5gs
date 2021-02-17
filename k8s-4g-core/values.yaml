@@ -1,11 +1,9 @@
-replicaCount: 1
-
 mmeExternalAddress: 1.2.3.4
 sgwuExternalAddress: 1.2.3.4
 webUiExternalAddress: 1.2.3.4
 webUiPort: 80
 initSubcribers: false
-mongoReplicas: 3
+mongoReplicas: 1
 
 requestsPreferences:
   hssDatabase:
