@@ -31,7 +31,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: mongo
-    namespace: {{ .Relase.Namespace }}
+    namespace: {{ .Release.Namespace }}
 ---
 apiVersion: v1
 kind: Service
