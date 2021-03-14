@@ -42,4 +42,6 @@ spec:
         - name: DB_URI
           value: "mongodb://mongodb/open5gs?replicaSet=rs0"
         - name: NODE_ENV
-          value: "production"          
+          value: "production"
+      nodeSelector:
+        mobile-core: cp          

@@ -75,7 +75,9 @@ spec:
               protocol: UDP
             - name: pfcp
               containerPort: 8805
-              protocol: UDP       
+              protocol: UDP
+      nodeSelector:
+        mobile-core: up       
       volumes:
         - name: {{ .Release.Namespace }}-pgwu-config
           configMap:

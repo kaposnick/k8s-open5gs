@@ -48,7 +48,8 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{ end }}
-             
+      nodeSelector:
+        mobile-core: cp
       volumes:
       - name: {{ .Release.Namespace }}-hss-config
         configMap:
