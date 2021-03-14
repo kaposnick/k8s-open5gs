@@ -36,7 +36,8 @@ spec:
       containers:
       - name: webui
         imagePullPolicy: IfNotPresent
-        image: open5gs-webui
+        image: {{ .Values.webUi.repository }}
+        imagePullPolicy: {{ .Values.webUi.pullPolicy }}
         command: ["node", "server/index.js"]
         env:
         - name: DB_URI
