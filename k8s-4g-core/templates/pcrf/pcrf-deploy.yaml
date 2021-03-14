@@ -51,6 +51,8 @@ spec:
             - name: gx
               containerPort: 3868
               protocol: TCP 
+      nodeSelector:
+        mobile-core: cp
       volumes:
         - name: {{ .Release.Namespace }}-pcrf-config
           configMap:

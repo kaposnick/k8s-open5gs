@@ -7,21 +7,21 @@ mongoReplicas: 1
 
 requestsPreferences:
   hssDatabase:
-    requestsLimitsDefinition: true
+    requestsLimitsDefinition: false
   hss:
-    requestsLimitsDefinition: true
+    requestsLimitsDefinition: false
   pcrf:
-    requestsLimitsDefinition: true
+    requestsLimitsDefinition: false
   mme:
-    requestsLimitsDefinition: true
+    requestsLimitsDefinition: false
   sgwc:
-    requestsLimitsDefinition: true
+    requestsLimitsDefinition: false
   sgwu:
-    requestsLimitsDefinition: true
+    requestsLimitsDefinition: false
   pgwc:
-    requestsLimitsDefinition: true
+    requestsLimitsDefinition: false
   pgwu:
-    requestsLimitsDefinition: true
+    requestsLimitsDefinition: false
 
 resources:
   requests:

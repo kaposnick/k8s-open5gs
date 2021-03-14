@@ -58,6 +58,8 @@ spec:
             - name: pfcp
               containerPort: 8805
               protocol: UDP      
+      nodeSelector:
+        mobile-core: cp
       volumes:
         - name: {{ .Release.Namespace }}-pgwc-config
           configMap:

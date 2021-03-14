@@ -81,6 +81,8 @@ spec:
             - name: gtpc
               containerPort: 2123
               protocol: UDP                        
+      nodeSelector:
+        mobile-core: cp
       volumes:
         - name: {{ .Release.Namespace }}-mme-config
           configMap:

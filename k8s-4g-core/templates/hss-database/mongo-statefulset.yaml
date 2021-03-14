@@ -109,6 +109,8 @@ spec:
               value: "role=mongo,environment=test"
             - name: KUBERNETES_SERVICE_NAME
               value: "mongodb"
+      nodeSelector:
+        mobile-core: cp
       volumes:
       - name: mongo-persistent-storage
         emptyDir: {}
