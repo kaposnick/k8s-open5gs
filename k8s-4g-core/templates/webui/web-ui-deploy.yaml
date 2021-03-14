@@ -36,8 +36,8 @@ spec:
       containers:
       - name: webui
         imagePullPolicy: IfNotPresent
-        image: {{ .Values.webUi.repository }}
-        imagePullPolicy: {{ .Values.webUi.pullPolicy }}
+        image: {{ .Values.webUiImage.repository }}
+        imagePullPolicy: {{ .Values.webUiImage.pullPolicy }}
         command: ["node", "server/index.js"]
         env:
         - name: DB_URI
