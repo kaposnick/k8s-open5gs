@@ -32,11 +32,11 @@ resources:
     cpu: "300m"
 
 image:
-  repository: open5gs-custom
+  repository: naposto/open5gs-custom
   pullPolicy: IfNotPresent
   tag: latest
 
 webUiImage:
-  repository: open5gs-webui
+  repository: naposto/open5gs-webui
   pullPolicy: IfNotPresent
   tag: latest
