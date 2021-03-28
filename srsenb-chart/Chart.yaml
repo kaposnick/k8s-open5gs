@@ -1,0 +1,10 @@
+apiVersion: v2
+name: srsenb-statistics-exporter
+description: A Helm chart for exporting srsENB statistics to kube-prometheus
+maintainers:
+  - name: Nikos Apostolakis
+    email: n.apostolakis@outlook.com
+
+type: application
+version: 0.1.0
+appVersion: "1.16.0"

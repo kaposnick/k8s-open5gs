@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-nginx-config
+  namespace: {{ .Release.Namespace }}
+data:
+  nginx.conf: |
+    events {
+      worker_connections   2000;
+    }
+
+    http {
+      server {
+        listen {{ .Values.nginx.port }};
+        location / {
+          proxy_pass http://{{ .Values.enb.ip }}:{{ .Values.enb.port }};
+        }
+      }
+    }
+
