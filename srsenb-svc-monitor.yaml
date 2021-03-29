@@ -1,0 +1,18 @@
+prometheus:
+  additionalServiceMonitors:
+  - name: srsenb-svc-monitor
+    jobLabel: srsenb-svc-job
+    namespaceSelector:
+      matchNames: ["open5gs"]
+    endpoints:
+    - port: metrics
+      interval: 5s
+      scheme: http
+      path: /metrics
+    selector:
+      matchLabels:
+        app: srsenb
+
+# command to apply the upper service monitor
+# helm install -n monitoring prometheus -f ../prometheus-values.yaml prometheus-community/kube-prometheus-stack
+# in case the srsenb services are deployed in different namespace than open5gs, they should be changed respectively  

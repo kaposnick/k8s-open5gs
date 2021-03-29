@@ -9,7 +9,7 @@ spec:
   selector:
     app: srsenb
   ports:
-  - name: nginxport
+  - name: metrics
     port: 8080
     targetPort: 8080
     protocol: TCP
