@@ -5,6 +5,7 @@ metadata:
     namespace: {{ .Release.Namespace }}
     labels:
         app: srsenb
+        release: prometheus
 spec:
     endpoints:
     -   port: metrics
