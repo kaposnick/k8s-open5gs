@@ -16,7 +16,7 @@ spec:
         srsenb: exporter
       annotations:
         prometheus.io/scrape: 'true'
-        prometheus.io/port: '{{ .nginx.port }}'
+        prometheus.io/port: '{{ .Values.nginx.port }}'
         prometheus.io/scheme: 'https'
     spec:
       containers:
