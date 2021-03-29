@@ -9,15 +9,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      srsenb: {{ .Release.Name}}-exporter
+      srsenb: {{ .Release.Name }}-exporter
   template:
     metadata:
       labels:
-        srsenb: {{ .Release.Name}}-exporter
-      annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/port: '{{ .Values.nginx.port }}'
-        prometheus.io/scheme: 'https'
+        srsenb: {{ .Release.Name }}-exporter
+        app: srsenb
     spec:
       containers:
       - name: {{ .Release.Name }}-nginx
