@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+    name: srsenb-svc-monitor
+    namespace: {{ .Release.Namespace }}
+    labels:
+        app: srsenb
+spec:
+    endpoints:
+    -   port: metrics
+        interval: {{ .Values.interval }}
+    namespaceSelector:
+        matchNames:
+        -   {{ .Release.Namespace }}
+    selector:
+        matchLabels:
+            app: srsenb

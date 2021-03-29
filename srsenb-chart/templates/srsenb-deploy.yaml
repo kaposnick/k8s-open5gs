@@ -4,16 +4,16 @@ metadata:
   name: {{ .Release.Name }}-exporter
   namespace: {{ .Release.Namespace }}  
   labels:
-    srsenb: exporter
+    app: srsenb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      srsenb: exporter
+      srsenb: {{ .Release.Name}}-exporter
   template:
     metadata:
       labels:
-        srsenb: exporter
+        srsenb: {{ .Release.Name}}-exporter
       annotations:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '{{ .Values.nginx.port }}'

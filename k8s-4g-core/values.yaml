@@ -23,6 +23,8 @@ requestsPreferences:
   pgwu:
     requestsLimitsDefinition: false
 
+interval: 5s
+
 resources:
   requests:
     memory: "64Mi"

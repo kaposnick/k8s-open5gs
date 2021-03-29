@@ -1,14 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: srsenb-exporter
+  name: srsenb-service
   namespace: {{ .Release.Namespace }}
   labels:
-    srsenb: exporter
+    app: srsenb
 spec:
-  type: ClusterIP
   selector:
-    srsenb: exporter
+    app: srsenb
   ports:
-  - port: 8080
+  - name: nginxport
+    port: 8080
     targetPort: 8080
+    protocol: TCP
