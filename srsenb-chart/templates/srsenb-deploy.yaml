@@ -27,8 +27,8 @@ spec:
         - name: {{ .Release.Name }}-nginx-config
           mountPath: /etc/nginx/nginx.conf
           subPath: "nginx.conf"
-        nodeSelector:
-          mobile-core: cp        
+      nodeSelector:
+        mobile-core: cp        
       volumes:
       - name: {{ .Release.Name }}-nginx-config
         configMap:
