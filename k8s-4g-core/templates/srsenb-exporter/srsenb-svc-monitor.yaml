@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
     name: srsenb-svc-monitor
-    namespace: {{ .Release.Namespace }}
+    namespace: monitoring
     labels:
         app: srsenb
         release: prometheus
