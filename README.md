@@ -1,6 +1,7 @@
+<img src="carlos_iii.png">
+
 # Cloud native Open5Gs
 
-<img align="right" src="carlos_iii.png">
 
 1. Title: <b>Performance evaluation of E2E service orchestration</b> 
 2. Course: <b>Master in NFV/SDN for 5G Networks 2020/21</b> 
