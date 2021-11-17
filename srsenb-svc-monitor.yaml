@@ -1,4 +1,6 @@
 prometheus:
+  prometheusSpec:
+    scrapeInterval: 5s
   additionalServiceMonitors:
   - name: srsenb-svc-monitor
     jobLabel: srsenb-svc-job

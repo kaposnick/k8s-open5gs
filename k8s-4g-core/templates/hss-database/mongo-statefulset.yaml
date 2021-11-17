@@ -70,7 +70,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: mongo
-          image: mongo
+          image: mongo:nikos
           {{ if eq .Values.initSubcribers true }}
           lifecycle:
             postStart:
