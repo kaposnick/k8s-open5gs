@@ -32,19 +32,19 @@ kubectl create namespace open5gs
 helm install open5gs -n open5gs .
 ```
 
-### 4. Retrieve the status
+### 4. Verify the state
 ```shell
 $ kubectl get pods -n open5gs -o wide
-NAME                             READY   STATUS    RESTARTS   AGE    IP             NODE       NOMINATED NODE   READINESS GATES
-mongo-0                          2/2     Running   0          7d3h   10.244.10.59   worker-1   <none>           <none>
-open5gs-hss-deployment-0         1/1     Running   3          7d3h   10.244.10.55   worker-1   <none>           <none>
-open5gs-mme-deployment-0         1/1     Running   1          7d3h   10.244.10.58   worker-1   <none>           <none>
-open5gs-pcrf-deployment-0        1/1     Running   3          7d3h   10.244.10.54   worker-1   <none>           <none>
-open5gs-pgwc-deployment-0        1/1     Running   0          7d3h   10.244.10.60   worker-1   <none>           <none>
-open5gs-pgwu-deployment-0        1/1     Running   0          7d3h   10.244.9.210   worker-2   <none>           <none>
-open5gs-sgwc-deployment-0        1/1     Running   0          7d3h   10.244.10.56   worker-1   <none>           <none>
-open5gs-sgwu-deployment-0        1/1     Running   0          7d3h   10.244.9.209   worker-2   <none>           <none>
-open5gs-webui-7b8d78bbdb-slc2l   1/1     Running   2          7d3h   10.244.10.57   worker-1   <none>           <none>
+NAME                             READY   STATUS    NODE    
+mongo-0                          2/2     Running   worker-1
+open5gs-hss-deployment-0         1/1     Running   worker-1
+open5gs-mme-deployment-0         1/1     Running   worker-1
+open5gs-pcrf-deployment-0        1/1     Running   worker-1
+open5gs-pgwc-deployment-0        1/1     Running   worker-1
+open5gs-pgwu-deployment-0        1/1     Running   worker-2
+open5gs-sgwc-deployment-0        1/1     Running   worker-1
+open5gs-sgwu-deployment-0        1/1     Running   worker-2
+open5gs-webui-7b8d78bbdb-slc2l   1/1     Running   worker-1
 ```
 
 The following steps are optional in case we want to have performance metrics collection from both the EPC and the RAN, using Prometheus.
@@ -63,7 +63,7 @@ Then for every srsENB process that we want to monitor, deploy a helm chart issui
 
 ```shell
 cd srsenb-chart
-helm install <srsenbname> -n open5gs --set enb.ip=<enb-ip> --set enb.port=<enb.port> .
+helm install <srsenbname> -n open5gs --set enb.ip=<enb-ip> --set enb.port=<enb-port> .
 ```
 
 When the Prometheus's ServiceDiscovery discovers the proxy pods, the srsENB will start getting polled and the metrics will starting getting received.
