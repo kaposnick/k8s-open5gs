@@ -1,3 +1,4 @@
+{{ if eq .Values.network_4g true }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -23,3 +24,4 @@ data:
            dev: eth0
 
     sgwc:        
+{{ end }}

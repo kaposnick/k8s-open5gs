@@ -1,3 +1,4 @@
+{{ if eq .Values.network_4g true }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -43,4 +44,4 @@ data:
     smf:
         gtpc:
           - name: "open5gs-pgwc-svc-pool"
-
+{{ end }}

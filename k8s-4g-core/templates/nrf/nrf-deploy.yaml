@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Namespace }}-nrf-svc-pool
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: nrf
+spec:
+  selector:
+    epc-mode: nrf
+  ports:
+  - name: sbi
+    port: 7777
+    protocol: TCP
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Namespace }}-nrf-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: nrf
+spec:
+  replicas: 1
+  serviceName: "{{ .Release.Namespace }}-nrf-svc-pool"
+  selector:
+    matchLabels:
+      epc-mode: nrf
+  template:
+    metadata:
+      labels:
+        epc-mode: nrf
+    spec:
+      containers:
+        - name: nrf
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["open5gs-nrfd", "-c", "/open5gs/config-map/nrf.yaml"]
+          volumeMounts:
+          - name: {{ .Release.Namespace }}-nrf-config
+            mountPath: /open5gs/config-map/nrf.yaml
+            subPath: "nrf.yaml"
+          ports:
+            - name: sbi
+              containerPort: 7777
+              protocol: TCP 
+      nodeSelector:
+        mobile-core: up
+      volumes:
+        - name: {{ .Release.Namespace }}-nrf-config
+          configMap:
+            name: {{ .Release.Namespace }}-nrf-config

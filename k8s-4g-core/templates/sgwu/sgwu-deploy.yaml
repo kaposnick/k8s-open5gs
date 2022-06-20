@@ -1,3 +1,4 @@
+{{ if eq .Values.network_4g true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -77,3 +78,4 @@ spec:
         - name: {{ .Release.Namespace }}-sgwu-config
           configMap:
             name: {{ .Release.Namespace }}-sgwu-config
+{{ end }}

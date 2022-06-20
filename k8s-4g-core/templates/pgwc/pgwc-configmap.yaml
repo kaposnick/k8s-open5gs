@@ -10,24 +10,30 @@ data:
     logger:
         file: /var/log/open5gs/pgwc.log
     
-    parameter:
-    
     smf:
-        freeDiameter: /open5gs/config-map/diameter-pgwc.conf
-        gtpc:
-           dev: eth0
-        pfcp:
-           dev: eth0
-        pdn:
-          - addr: 10.45.0.1/16
-          - addr: cafe::1/64
-        dns:
-          - 8.8.8.8
-          - 8.8.4.4
-          - 2001:4860:4860::8888
-          - 2001:4860:4860::8844
-        mtu: 1400
+      sbi:
+        - addr: 0.0.0.0
+          port: 7777
+      pfcp:
+          dev: eth0
+      gtpc:
+          dev: eth0
+      gtpu:
+          dev: eth0
+      subnet:
+        - addr: 10.45.0.1/16
+        - addr: cafe::1/64
+      dns:
+        - 8.8.8.8
+        - 8.8.4.4
+        - 2001:4860:4860::8888
+        - 2001:4860:4860::8844
+      mtu: 1400
     
     upf:
-        pfcp:
-          - name: "{{ .Release.Namespace }}-pgwu-svc-pool"
+      pfcp:
+        - name: "{{ .Release.Namespace }}-pgwu-svc-pool"
+    nrf:
+      sbi:
+        - name: "{{ .Release.Namespace }}-nrf-svc-pool"
+          port: 7777

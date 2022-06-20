@@ -1,3 +1,4 @@
+{{ if eq .Values.network_4g true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -46,3 +47,4 @@ spec:
           value: "production"
       nodeSelector:
         mobile-core: cp          
+{{ end }}

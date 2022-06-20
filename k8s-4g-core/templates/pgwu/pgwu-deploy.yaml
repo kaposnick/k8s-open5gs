@@ -1,6 +1,24 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ .Release.Namespace }}-pgwu-svc-pool-external
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: pgwu
+spec:
+  type: LoadBalancer
+  externalIPs:
+    - {{ .Values.upfExternalAddress }}
+  ports:
+    - name: gtpu
+      port: 2152
+      protocol: UDP
+  selector:
+    epc-mode: pgwu
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: {{ .Release.Namespace }}-pgwu-svc-pool
   namespace: {{ .Release.Namespace }}
   labels:
@@ -8,12 +26,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  # - name: gtpc
-  #   port: 2123
-  #   protocol: UDP
-  - name: gtpu
-    port: 2152
-    protocol: UDP
   - name: pfcp
     port: 8805
     protocol: UDP   
@@ -77,7 +89,7 @@ spec:
               containerPort: 8805
               protocol: UDP
       nodeSelector:
-        mobile-core: up       
+        mobile-core: up
       volumes:
         - name: {{ .Release.Namespace }}-pgwu-config
           configMap:

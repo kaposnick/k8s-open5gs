@@ -1,5 +1,5 @@
 ARG UBUNTU_VERSION=20.04
-ARG OPEN5GS_TAG=v2.1.7
+ARG OPEN5GS_TAG=v2.4.8
 
 FROM ubuntu:${UBUNTU_VERSION} as open5gs-builder 
 LABEL open5gs-builder=true 
@@ -28,6 +28,8 @@ RUN apt update && \
         libmicrohttpd-dev \ 
         libcurl4-gnutls-dev \ 
         libnghttp2-dev \ 
+        libtins-dev \
+        libtalloc-dev \
         meson \
     && mkdir open5gs \
     && git clone $OPEN5GS_REPO open5gs \
@@ -58,11 +60,14 @@ RUN apt update \
         libmicrohttpd-dev \
         libcurl4-gnutls-dev \
         libnghttp2-dev \
+        libtins-dev \
+        libtalloc-dev \        
         iproute2 \ 
         iptables \
         iputils-ping \ 
         tcpdump \
         net-tools \
+        vim \
         less
 
 COPY --from=open5gs-builder ${DIR_INSTALL}/bin/ /usr/bin/
