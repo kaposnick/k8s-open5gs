@@ -70,13 +70,13 @@ RUN apt update \
         less
 
 COPY --from=open5gs-builder ${DIR_INSTALL}/bin/ /usr/bin/
-COPY --from=open5gs-builder ${DIR_INSTALL}/etc/open5gs/*.yaml /open5gs/install/etc/open5gs/
-COPY --from=open5gs-builder ${DIR_INSTALL}/etc/freeDiameter/  /open5gs/install/etc/freeDiameter/
+COPY --from=open5gs-builder ${DIR_INSTALL}/etc/open5gs/*.yaml /etc/open5gs/
+COPY --from=open5gs-builder ${DIR_INSTALL}/etc/freeDiameter/  /etc/freeDiameter/
 COPY --from=open5gs-builder ${DIR_INSTALL}/lib/*/libogs*.so* /usr/lib/x86_64-linux-gnu/
 COPY --from=open5gs-builder ${DIR_INSTALL}/lib/*/libfd*.so* /usr/lib/x86_64-linux-gnu/
-COPY --from=open5gs-builder ${DIR_INSTALL}/lib/*/freeDiameter/*.fdx /open5gs/install/lib/x86_64-linux-gnu/freeDiameter/
-COPY --from=open5gs-builder ${DIR_CONFIGS}/freeDiameter/*.pem /open5gs/install/etc/freeDiameter/
+COPY --from=open5gs-builder ${DIR_INSTALL}/lib/*/freeDiameter/*.fdx /usr/lib/x86_64-linux-gnu/freeDiameter/
+COPY --from=open5gs-builder ${DIR_CONFIGS}/freeDiameter/*.pem /etc/freeDiameter/
 COPY --from=open5gs-builder ${DIR_INSTALL}/../misc/db/open5gs-dbctl /usr/bin
 
-RUN mkdir -p /open5gs/install/var/log/open5gs
+RUN mkdir -p /var/log/open5gs
 
