@@ -50,7 +50,7 @@ spec:
               containerPort: 8805
               protocol: UDP
             - name: sbi
-              containerPort: 7777
+              containerPort: 80
               protocol: TCP
       nodeSelector:
         mobile-core: cp

@@ -10,7 +10,7 @@ spec:
     epc-mode: nrf
   ports:
   - name: sbi
-    port: 7777
+    port: 80
     protocol: TCP
 ---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
@@ -42,7 +42,7 @@ spec:
             subPath: "nrf.yaml"
           ports:
             - name: sbi
-              containerPort: 7777
+              containerPort: 80
               protocol: TCP 
       nodeSelector:
         mobile-core: cp
