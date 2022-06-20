@@ -1,5 +1,5 @@
 ARG UBUNTU_VERSION=20.04
-ARG OPEN5GS_TAG=v2.1.7
+ARG OPEN5GS_TAG=v2.4.8
 
 FROM ubuntu:${UBUNTU_VERSION} as open5gs-builder 
 LABEL open5gs-builder=true 
@@ -28,6 +28,8 @@ RUN apt update && \
         libmicrohttpd-dev \ 
         libcurl4-gnutls-dev \ 
         libnghttp2-dev \ 
+        libtins-dev \
+        libtalloc-dev \
         meson \
     && mkdir open5gs \
     && git clone $OPEN5GS_REPO open5gs \
@@ -58,6 +60,8 @@ RUN apt update \
         libmicrohttpd-dev \
         libcurl4-gnutls-dev \
         libnghttp2-dev \
+        libtins-dev \
+        libtalloc-dev \        
         iproute2 \ 
         iptables \
         iputils-ping \ 
@@ -66,13 +70,13 @@ RUN apt update \
         less
 
 COPY --from=open5gs-builder ${DIR_INSTALL}/bin/ /usr/bin/
-COPY --from=open5gs-builder ${DIR_INSTALL}/etc/open5gs/*.yaml /etc/open5gs/
-COPY --from=open5gs-builder ${DIR_INSTALL}/etc/freeDiameter/ /etc/freeDiameter/
+COPY --from=open5gs-builder ${DIR_INSTALL}/etc/open5gs/*.yaml /open5gs/install/etc/open5gs/
+COPY --from=open5gs-builder ${DIR_INSTALL}/etc/freeDiameter/  /open5gs/install/etc/freeDiameter/
 COPY --from=open5gs-builder ${DIR_INSTALL}/lib/*/libogs*.so* /usr/lib/x86_64-linux-gnu/
 COPY --from=open5gs-builder ${DIR_INSTALL}/lib/*/libfd*.so* /usr/lib/x86_64-linux-gnu/
-COPY --from=open5gs-builder ${DIR_INSTALL}/lib/*/freeDiameter/*.fdx /usr/lib/x86_64-linux-gnu/freeDiameter/
-COPY --from=open5gs-builder ${DIR_CONFIGS}/freeDiameter/*.pem /etc/freeDiameter/
+COPY --from=open5gs-builder ${DIR_INSTALL}/lib/*/freeDiameter/*.fdx /open5gs/install/lib/x86_64-linux-gnu/freeDiameter/
+COPY --from=open5gs-builder ${DIR_CONFIGS}/freeDiameter/*.pem /open5gs/install/etc/freeDiameter/
 COPY --from=open5gs-builder ${DIR_INSTALL}/../misc/db/open5gs-dbctl /usr/bin
 
-RUN mkdir /var/log/open5gs
+RUN mkdir -p /open5gs/install/var/log/open5gs
 
