@@ -12,7 +12,7 @@ data:
     amf:
         sbi:
           - addr: 0.0.0.0
-          - port: 7777
+            port: 7777
         ngap:
            dev: eth0
         guami:

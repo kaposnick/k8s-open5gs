@@ -1,6 +1,7 @@
 mmeExternalAddress: 172.16.4.215
 sgwuExternalAddress: 172.16.5.33
 webUiExternalAddress: 172.16.4.215
+upfExternalAddress: 
 webUiPort: 80
 initSubcribers: true
 mongoReplicas: 1

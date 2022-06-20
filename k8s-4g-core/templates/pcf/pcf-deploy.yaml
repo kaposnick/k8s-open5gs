@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Namespace }}-pcf-svc-pool
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: pcf
+spec:
+  selector:
+    epc-mode: pcf
+  ports:
+  - name: sbi
+    port: 7777
+    protocol: TCP
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Namespace }}-pcf-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: pcf
+spec:
+  replicas: 1
+  serviceName: "{{ .Release.Namespace }}-pcf-svc-pool"
+  selector:
+    matchLabels:
+      epc-mode: pcf
+  template:
+    metadata:
+      labels:
+        epc-mode: pcf
+    spec:
+      containers:
+        - name: pcf
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["open5gs-pcfd", "-c", "/open5gs/config-map/pcf.yaml"]
+          volumeMounts:
+          - name: {{ .Release.Namespace }}-pcf-config
+            mountPath: /open5gs/config-map/pcf.yaml
+            subPath: "pcf.yaml"
+          {{ if eq .Values.requestsPreferences.pcf.requestsLimitsDefinition true}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{ end }}
+          ports:
+            - name: sbi
+              containerPort: 7777
+              protocol: TCP 
+      nodeSelector:
+        mobile-core: cp
+      volumes:
+        - name: {{ .Release.Namespace }}-pcf-config
+          configMap:
+            name: {{ .Release.Namespace }}-pcf-config

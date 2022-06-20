@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Namespace }}-pcf-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: pcf
+data:
+  pcf.yaml: |
+    db_uri: mongodb://mongodb/open5gs?replicaSet=rs0
+    
+    logger:
+        file: /var/log/open5gs/pcf.log
+    
+    pcf:
+      sbi:
+        - addr: 0.0.0.0
+          port: 7777

@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Namespace }}-ausf-svc-pool
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: ausf
+spec:
+  selector:
+    epc-mode: ausf
+  ports:
+  - name: sbi
+    port: 7777
+    protocol: TCP
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Namespace }}-ausf-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: ausf
+spec:
+  replicas: 1
+  serviceName: "{{ .Release.Namespace }}-ausf-svc-pool"
+  selector:
+    matchLabels:
+      epc-mode: ausf
+  template:
+    metadata:
+      labels:
+        epc-mode: ausf
+    spec:
+      containers:
+        - name: ausf
+          image: {{ .Values.image.repository }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["open5gs-ausfd", "-c", "/open5gs/config-map/ausf.yaml"]
+          volumeMounts:
+          - name: {{ .Release.Namespace }}-ausf-config
+            mountPath: /open5gs/config-map/ausf.yaml
+            subPath: "ausf.yaml"
+          {{ if eq .Values.requestsPreferences.ausf.requestsLimitsDefinition true}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{ end }}
+          ports:
+            - name: sbi
+              containerPort: 7777
+              protocol: TCP 
+      nodeSelector:
+        mobile-core: cp
+      volumes:
+        - name: {{ .Release.Namespace }}-ausf-config
+          configMap:
+            name: {{ .Release.Namespace }}-ausf-config
