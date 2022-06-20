@@ -40,10 +40,13 @@ spec:
           - name: {{ .Release.Namespace }}-ausf-config
             mountPath: /open5gs/config-map/ausf.yaml
             subPath: "ausf.yaml"
+<<<<<<< HEAD
           {{ if eq .Values.requestsPreferences.ausf.requestsLimitsDefinition true}}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{ end }}
+=======
+>>>>>>> master
           ports:
             - name: sbi
               containerPort: 7777

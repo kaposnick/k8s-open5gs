@@ -1,3 +1,4 @@
+{{ if eq .Values.network_4g true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -57,3 +58,4 @@ spec:
       - name: {{ .Release.Namespace }}-hss-diameter
         configMap:
           name: {{ .Release.Namespace }}-hss-diameter          
+{{ end }}

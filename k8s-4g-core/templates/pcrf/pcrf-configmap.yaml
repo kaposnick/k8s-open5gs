@@ -1,3 +1,4 @@
+{{ if eq .Values.network_4g true }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,3 +17,4 @@ data:
     
     pcrf:
         freeDiameter: /open5gs/config-map/diameter-pcrf.conf
+{{ end }}

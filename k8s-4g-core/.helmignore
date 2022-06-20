@@ -21,3 +21,18 @@
 .idea/
 *.tmproj
 .vscode/
+# templates/nrf
+# templates/amf
+# templates/pgwc
+# templates/pgwu
+templates/nssf
+templates/ausf
+templates/hss
+templates/mme
+templates/pcf
+templates/pcrf
+templates/sgwc
+templates/sgwu
+templates/udm
+templates/udr
+templates/webui

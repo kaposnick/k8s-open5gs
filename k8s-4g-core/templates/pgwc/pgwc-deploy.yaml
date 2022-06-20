@@ -8,9 +8,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - name: gtpc
-    port: 2123
-    protocol: UDP
   - name: pfcp
     port: 8805
     protocol: UDP
@@ -44,26 +41,20 @@ spec:
           - name: {{ .Release.Namespace }}-pgwc-config
             mountPath: /open5gs/config-map/pgwc.yaml
             subPath: "pgwc.yaml"
-          - name: {{ .Release.Namespace }}-pgwc-diameter
-            mountPath: /open5gs/config-map/diameter-pgwc.conf
-            subPath: "diameter-pgwc.conf"
           {{ if eq .Values.requestsPreferences.pgwc.requestsLimitsDefinition true}}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{ end }}
           ports:
-            - name: gtpc
-              containerPort: 2123
-              protocol: UDP
             - name: pfcp
               containerPort: 8805
-              protocol: UDP      
+              protocol: UDP
+            - name: sbi
+              containerPort: 7777
+              protocol: TCP
       nodeSelector:
         mobile-core: cp
       volumes:
         - name: {{ .Release.Namespace }}-pgwc-config
           configMap:
             name: {{ .Release.Namespace }}-pgwc-config
-        - name: {{ .Release.Namespace }}-pgwc-diameter
-          configMap:
-            name: {{ .Release.Namespace }}-pgwc-diameter

@@ -17,8 +17,14 @@ data:
            dev: eth0
         gtpu:
           - dev: eth0
+<<<<<<< HEAD
             advertise_addr:
              - {{ .Values.upfExternalAddress }} 
         pdn:
+=======
+            advertise:
+             - {{ .Values.upfExternalAddress }} 
+        subnet:
+>>>>>>> master
           - addr: 10.45.0.1/16
           - addr: cafe::1/64

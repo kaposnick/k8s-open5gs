@@ -1,10 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
+<<<<<<< HEAD
   name: {{ .Release.Namespace }}-upf-svc-pool-external
   namespace: {{ .Release.Namespace }}
   labels:
     epc-mode: upf
+=======
+  name: {{ .Release.Namespace }}-pgwu-svc-pool-external
+  namespace: {{ .Release.Namespace }}
+  labels:
+    epc-mode: pgwu
+>>>>>>> master
 spec:
   type: LoadBalancer
   externalIPs:
@@ -12,10 +19,16 @@ spec:
   ports:
     - name: gtpu
       port: 2152
+<<<<<<< HEAD
       targetPort: 2152
       protocol: UDP
   selector:
     epc-mode: upf
+=======
+      protocol: UDP
+  selector:
+    epc-mode: pgwu
+>>>>>>> master
 ---
 apiVersion: v1
 kind: Service
@@ -90,7 +103,7 @@ spec:
               containerPort: 8805
               protocol: UDP
       nodeSelector:
-        mobile-core: up       
+        mobile-core: up
       volumes:
         - name: {{ .Release.Namespace }}-pgwu-config
           configMap:

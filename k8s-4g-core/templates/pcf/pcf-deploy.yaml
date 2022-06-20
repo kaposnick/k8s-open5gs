@@ -40,10 +40,13 @@ spec:
           - name: {{ .Release.Namespace }}-pcf-config
             mountPath: /open5gs/config-map/pcf.yaml
             subPath: "pcf.yaml"
+<<<<<<< HEAD
           {{ if eq .Values.requestsPreferences.pcf.requestsLimitsDefinition true}}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{ end }}
+=======
+>>>>>>> master
           ports:
             - name: sbi
               containerPort: 7777
