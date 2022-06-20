@@ -40,13 +40,6 @@ spec:
           - name: {{ .Release.Namespace }}-udr-config
             mountPath: /open5gs/config-map/udr.yaml
             subPath: "udr.yaml"
-<<<<<<< HEAD
-          {{ if eq .Values.requestsPreferences.udr.requestsLimitsDefinition true}}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{ end }}
-=======
->>>>>>> master
           ports:
             - name: sbi
               containerPort: 7777

@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-mmeExternalAddress: 172.16.4.215
-sgwuExternalAddress: 172.16.5.33
-webUiExternalAddress: 172.16.4.215
-upfExternalAddress: 
-=======
 mmeExternalAddress: 172.16.4.239
 sgwuExternalAddress: 172.16.4.235
 webUiExternalAddress: 172.16.4.239
 upfExternalAddress: 172.16.4.235
->>>>>>> master
 webUiPort: 80
 initSubcribers: true
 mongoReplicas: 1

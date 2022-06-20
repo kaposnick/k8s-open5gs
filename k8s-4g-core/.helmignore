@@ -25,6 +25,7 @@
 # templates/amf
 # templates/pgwc
 # templates/pgwu
+templates/hss-database
 templates/nssf
 templates/ausf
 templates/hss

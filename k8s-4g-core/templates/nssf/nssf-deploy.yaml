@@ -40,13 +40,6 @@ spec:
           - name: {{ .Release.Namespace }}-nssf-config
             mountPath: /open5gs/config-map/nssf.yaml
             subPath: "nssf.yaml"
-<<<<<<< HEAD
-          {{ if eq .Values.requestsPreferences.nssf.requestsLimitsDefinition true}}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{ end }}
-=======
->>>>>>> master
           ports:
             - name: sbi
               containerPort: 7777

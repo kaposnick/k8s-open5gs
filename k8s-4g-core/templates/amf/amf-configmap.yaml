@@ -19,11 +19,6 @@ data:
           - plmn_id:
               mcc: 001
               mnc: 01
-<<<<<<< HEAD
-            amf_id::
-              region: 2
-              set: 1
-=======
             amf_id:
               region: 2
               set: 1
@@ -32,7 +27,6 @@ data:
               mcc: 001
               mnc: 01
             tac: 1
->>>>>>> master
         plmn_support:
           - plmn_id:
               mcc: 001
@@ -48,12 +42,8 @@ data:
             ciphering_order : [ NEA0, NEA1, NEA2 ]
         network_name:
             full: Open5GS
-<<<<<<< HEAD
-        amf_name: open5gs-amf0
-=======
         amf_name: open5gs-amf0
     nrf:
       sbi:
         - name: "{{ .Release.Namespace }}-nrf-svc-pool"
           port: 7777
->>>>>>> master

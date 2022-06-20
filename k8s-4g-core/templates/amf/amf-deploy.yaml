@@ -10,37 +10,13 @@ spec:
     epc-mode: amf    
   type: LoadBalancer
   externalIPs:
-<<<<<<< HEAD
-    - {{ .Values.amfExternalAddress }}
-=======
     - {{ .Values.mmeExternalAddress }}
->>>>>>> master
   ports:
   - name: n2
     port: 38412
     targetPort: 38412
     protocol: SCTP  
 ---
-<<<<<<< HEAD
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Release.Namespace }}-amf-svc-pool
-  namespace: {{ .Release.Namespace }}
-  labels:
-    epc-mode: amf
-spec:
-  selector:
-    app: appname
-  type: ClusterIP
-  ports:
-  - name: sbi
-    port: 7777
-    protocol: TCP
-
----
-=======
->>>>>>> master
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: StatefulSet
 metadata:
@@ -67,15 +43,7 @@ spec:
           volumeMounts:
           - name: {{ .Release.Namespace }}-amf-config
             mountPath: /open5gs/config-map/amf.yaml
-<<<<<<< HEAD
-            subPath: "amf.yaml"
-          {{ if eq .Values.requestsPreferences.amf.requestsLimitsDefinition true}}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{ end }}          
-=======
             subPath: "amf.yaml"         
->>>>>>> master
           ports:
             - name: n2 
               containerPort: 36412

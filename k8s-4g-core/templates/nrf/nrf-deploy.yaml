@@ -40,23 +40,12 @@ spec:
           - name: {{ .Release.Namespace }}-nrf-config
             mountPath: /open5gs/config-map/nrf.yaml
             subPath: "nrf.yaml"
-<<<<<<< HEAD
-          {{ if eq .Values.requestsPreferences.nrf.requestsLimitsDefinition true}}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{ end }}
-=======
->>>>>>> master
           ports:
             - name: sbi
               containerPort: 7777
               protocol: TCP 
       nodeSelector:
-<<<<<<< HEAD
         mobile-core: cp
-=======
-        mobile-core: up
->>>>>>> master
       volumes:
         - name: {{ .Release.Namespace }}-nrf-config
           configMap:
