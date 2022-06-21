@@ -46,7 +46,7 @@ spec:
             subPath: "amf.yaml"         
           ports:
             - name: n2 
-              containerPort: 36412
+              containerPort: 38412
               protocol: SCTP
             - name: sbi
               containerPort: 7777
