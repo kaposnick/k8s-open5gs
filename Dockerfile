@@ -34,7 +34,7 @@ RUN apt update && \
     && mkdir open5gs \
     && git clone $OPEN5GS_REPO open5gs \
     && cd open5gs \
-    && git checkout ${OPEN5GS_TAG} \
+    && git checkout $OPEN5GS_TAG \
     && meson build --prefix=`pwd`/install \
     && ninja -C build \
     && cd build \

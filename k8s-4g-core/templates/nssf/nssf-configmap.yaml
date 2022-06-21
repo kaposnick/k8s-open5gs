@@ -12,10 +12,14 @@ data:
     
     nssf:
       sbi:
-        - addr: 0.0.0.0
+        - dev: eth0
           port: 7777
       nsi:
-        - addr: ::1
+        - name: "{{ .Release.Namespace }}-nrf-svc-pool"
           port: 7777
           s_nssai:
             sst: 1
+    nrf:
+      sbi:
+        - name: "{{ .Release.Namespace }}-nrf-svc-pool"
+          port: 7777

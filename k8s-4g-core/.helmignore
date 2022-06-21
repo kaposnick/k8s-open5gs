@@ -25,15 +25,15 @@
 # templates/amf
 # templates/pgwc
 # templates/pgwu
-templates/hss-database
-templates/nssf
-templates/ausf
+# templates/nssf
+# templates/pcf
+# templates/ausf
+# templates/udm
+# templates/udr
+# templates/hss-database
 templates/hss
 templates/mme
-templates/pcf
 templates/pcrf
 templates/sgwc
 templates/sgwu
-templates/udm
-templates/udr
 templates/webui

@@ -12,6 +12,7 @@ data:
     amf:
         sbi:
           - dev: eth0
+            port: 7777
         ngap:
            dev: eth0
         guami:
@@ -45,4 +46,4 @@ data:
     nrf:
       sbi:
         - name: "{{ .Release.Namespace }}-nrf-svc-pool"
-          port: 80
+          port: 7777
