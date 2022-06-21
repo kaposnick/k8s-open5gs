@@ -12,6 +12,7 @@ spec:
   ports:
     - name: gtpu
       port: 2152
+      targetPort: 2152
       protocol: UDP
   selector:
     epc-mode: pgwu
