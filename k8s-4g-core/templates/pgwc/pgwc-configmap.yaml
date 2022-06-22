@@ -22,7 +22,9 @@ data:
           dev: eth0
       subnet:
         - addr: 10.45.0.1/16
+          dnn: internet
         - addr: cafe::1/64
+          dnn: internet
       dns:
         - 8.8.8.8
         - 8.8.4.4

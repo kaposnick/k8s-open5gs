@@ -42,6 +42,6 @@ image:
   tag: latest
 
 webUiImage:
-  repository: naposto/open5gs-webui
+  repository: naposto/ogs-webui-2.4.8
   pullPolicy: IfNotPresent
   tag: latest

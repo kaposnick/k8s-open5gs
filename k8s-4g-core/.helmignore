@@ -27,13 +27,14 @@
 # templates/pgwu
 # templates/nssf
 # templates/pcf
+# templates/bsf
 # templates/ausf
 # templates/udm
 # templates/udr
 # templates/hss-database
+# templates/webui
 templates/hss
 templates/mme
 templates/pcrf
 templates/sgwc
 templates/sgwu
-templates/webui

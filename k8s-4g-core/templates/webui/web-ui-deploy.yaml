@@ -1,4 +1,3 @@
-{{ if eq .Values.network_4g true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -39,12 +38,12 @@ spec:
         imagePullPolicy: IfNotPresent
         image: {{ .Values.webUiImage.repository }}
         imagePullPolicy: {{ .Values.webUiImage.pullPolicy }}
-        command: ["node", "server/index.js"]
+        command: ["/bin/sh", "-c"]
+        args:
+         - sleep 30;
+           npm run dev
         env:
         - name: DB_URI
           value: "mongodb://mongodb/open5gs?replicaSet=rs0"
-        - name: NODE_ENV
-          value: "production"
       nodeSelector:
-        mobile-core: cp          
-{{ end }}
+        mobile-core: cp
