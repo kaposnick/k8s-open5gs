@@ -10,5 +10,5 @@ data:
   reg_subscriber.sh: |
     #!/bin/bash
 
-    mongoimport --db open5gs --collection subscribers --file /open5gs/config-map/imsi.json --type json --jsonArray || true
+    mongoimport --db open5gs --collection subscribers --file /open5gs/config-map/imsi_5g.json --type json --jsonArray || true
 {{ end }}

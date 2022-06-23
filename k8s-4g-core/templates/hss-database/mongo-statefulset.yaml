@@ -90,8 +90,8 @@ spec:
             mountPath: /data/db
           {{ if eq .Values.initSubcribers true }}
           - name: {{ .Release.Namespace }}-mongodb-imsi-config
-            mountPath: /open5gs/config-map/imsi.json
-            subPath: "imsi.json"
+            mountPath: /open5gs/config-map/imsi_5g.json
+            subPath: "imsi_5g.json"
           - name: {{ .Release.Namespace }}-mongodb-config
             mountPath: /open5gs/config-map/reg_subscriber.sh
             subPath: "reg_subscriber.sh"
