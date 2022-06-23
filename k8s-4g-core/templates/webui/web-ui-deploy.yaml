@@ -44,6 +44,7 @@ spec:
            npm run dev
         env:
         - name: DB_URI
-          value: "mongodb://mongodb/open5gs?replicaSet=rs0"
+          value: "{{ .Values.db_uri }}"
+          # value: "mongodb://mongodb/open5gs?replicaSet=rs0"
       nodeSelector:
         mobile-core: cp

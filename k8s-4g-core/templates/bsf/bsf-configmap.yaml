@@ -7,7 +7,7 @@ metadata:
     epc-mode: bsf
 data:
   bsf.yaml: |
-    db_uri: mongodb://mongodb/open5gs?replicaSet=rs0
+    db_uri: {{ .Values.db_uri }}
     
     logger:
         file: /var/log/open5gs/bsf.log

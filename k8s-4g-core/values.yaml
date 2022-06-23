@@ -1,11 +1,12 @@
-mmeExternalAddress: 172.16.4.239
-sgwuExternalAddress: 172.16.4.235
-webUiExternalAddress: 172.16.4.239
-upfExternalAddress: 172.16.4.235
+mmeExternalAddress: 192.168.123.188
+sgwuExternalAddress: 192.168.123.25
+webUiExternalAddress: 192.168.123.188
+upfExternalAddress: 192.168.123.25
 webUiPort: 80
 initSubcribers: true
 mongoReplicas: 1
 network_4g: false
+db_uri: mongodb://mongodb/open5gs
 
 
 requestsPreferences:

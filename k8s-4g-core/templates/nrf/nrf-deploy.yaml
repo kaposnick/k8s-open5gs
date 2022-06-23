@@ -6,6 +6,7 @@ metadata:
   labels:
     epc-mode: nrf
 spec:
+  type: ClusterIP
   selector:
     epc-mode: nrf
   ports:

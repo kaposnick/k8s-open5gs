@@ -7,7 +7,7 @@ metadata:
     epc-mode: pcf
 data:
   pcf.yaml: |
-    db_uri: mongodb://mongodb/open5gs?replicaSet=rs0
+    db_uri: {{ .Values.db_uri }}
     
     logger:
         file: /var/log/open5gs/pcf.log
