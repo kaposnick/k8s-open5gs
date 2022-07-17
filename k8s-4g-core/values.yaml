@@ -1,7 +1,7 @@
-mmeExternalAddress: 192.168.123.188
-sgwuExternalAddress: 192.168.123.25
-webUiExternalAddress: 192.168.123.188
-upfExternalAddress: 192.168.123.25
+mmeExternalAddress: 192.168.123.189
+sgwuExternalAddress: 192.168.123.26
+webUiExternalAddress: 192.168.123.189
+upfExternalAddress: 192.168.123.26
 webUiPort: 80
 initSubcribers: true
 mongoReplicas: 1

@@ -16,5 +16,7 @@ prometheus:
         app: srsenb
 
 # command to apply the upper service monitor
+# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+# helm repo update
 # helm install -n monitoring prometheus -f ../prometheus-values.yaml prometheus-community/kube-prometheus-stack
 # in case the srsenb services are deployed in different namespace than open5gs, they should be changed respectively  

@@ -36,7 +36,7 @@ spec:
         - name: pgwc
           image: {{ .Values.image.repository }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["open5gs-smfd", "-c", "/open5gs/config-map/pgwc.yaml", "-d"]
+          command: ["open5gs-smfd", "-c", "/open5gs/config-map/pgwc.yaml"]
           volumeMounts:
           - name: {{ .Release.Namespace }}-pgwc-config
             mountPath: /open5gs/config-map/pgwc.yaml
