@@ -2,6 +2,20 @@
 
 <b>Design and Validation of an Open Source Cloud Native Mobile Network</b> 
 
+The repository contains the code and data of the paper "Design and Validation of an Open Source Cloud Native Mobile Network" by N. Apostolakis, M. Gramaglia, P. Serrano. Please cite the paper if you plan to use it in your publication.
+
+```BibTex
+@ARTICLE{9877928,
+  author={Apostolakis, Nikolaos and Gramaglia, Marco and Serrano, Pablo},
+  journal={IEEE Communications Magazine}, 
+  title={Design and Validation of an Open Source Cloud Native Mobile Network}, 
+  year={2022},
+  volume={60},
+  number={11},
+  pages={66-72},
+  doi={10.1109/MCOM.003.2200195}}
+```
+
 ## Create the VM Network topology
 * Latest Ubuntu 20.04 LTS version as VMs' base image
 * Using `KVM`, `virsh` and `virt-manager`, create 3 VM domains; 1 for Master Node, 2 Worker Nodes. Give each one at least of 10G of disk space (this is important as while deploying the open5Gs pods, the node may suffer from disk pressure)
