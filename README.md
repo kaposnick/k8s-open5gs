@@ -2,7 +2,7 @@
 
 <b>Design and Validation of an Open Source Cloud Native Mobile Network</b> 
 
-The repository contains the code and data of the paper "Design and Validation of an Open Source Cloud Native Mobile Network" by N. Apostolakis, M. Gramaglia, P. Serrano. Please cite the paper if you plan to use it in your publication.
+The repository contains the code of the paper "Design and Validation of an Open Source Cloud Native Mobile Network" by N. Apostolakis, M. Gramaglia, P. Serrano. Please cite the paper if you plan to use it in your publication.
 
 ```BibTex
 @ARTICLE{9877928,
